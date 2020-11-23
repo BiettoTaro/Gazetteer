@@ -5,7 +5,10 @@
 
   $execution_start_time = microtime(true) / 1000;
 
-  $url = 'http://api.geonames.org/countryInfoJSON?lang=en&country=' . $_REQUEST['country'] . '&username=fabio_s&style=full';
+
+  
+
+  $url = 'https://api.covid19api.com/total/country/' . $_REQUEST['country'] . '?from=2020-03-01T00:00:00Z&to=2020-11-23Z';
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -22,7 +25,7 @@
   $output['status']['name'] = "ok";
   $output['status']['description'] = "mission saved";
   $output['status']['returnedIn'] = (microtime(true) - $execution_start_time) / 1000 . "ms";
-  $output['data'] = $decode['geonames'];
+  $output['data'] = $decode;
 
   header('Content-Type: application/json; charset=UTF-8');
 

@@ -14,7 +14,12 @@
     100% { transform: rotate(360deg); }
   }
 
- 
+#txtCountry {
+  margin: auto;
+  
+}
+
+
 /* map */
 #map {
     position: absolute;
