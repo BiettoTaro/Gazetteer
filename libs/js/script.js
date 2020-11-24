@@ -54,7 +54,7 @@ const fail = err => {
 
 
 $(document).ready(function () {
-
+  
 
   if (navigator.geolocation) {
     let giveUp = 1000 * 30;
@@ -71,7 +71,7 @@ $(document).ready(function () {
 
   $(window).load(function () {
     // Animate loader off screen
-    $("#loader").fadeOut("slow");;
+    $('#loader').style.display='none';
 
     $.ajax({
       url: 'libs/php/countryBorder.php',
@@ -109,14 +109,16 @@ $(document).ready(function () {
           country: $('#countrySelect').val()
         },
         success: function (result) {
-
+        console.log(result);
           if (result.status.name == 'ok') {
             $('#flag').attr('src', `https://www.countryflags.io/${$('#countrySelect').val()}/flat/64.png`);
             $('#txtCountry').html(result['data'][0]['countryName']);
             $('#txtCapital').html(result['data'][0]['capital']);
             $('#txtPop').html(roundData(result['data'][0]['population']));
             $('#txtCurrency').html(result['data'][0]['currencyCode']);
-            $('#wiki').attr('href', `https://en.wikipedia.org/wiki/${$('#countrySelect option:selected').text()}`)
+            $('#wiki').attr('href', `https://en.wikipedia.org/wiki/${$('#countrySelect option:selected').text()}`);
+
+            
           }
         }
       })
@@ -134,7 +136,7 @@ $(document).ready(function () {
 
 
           if (result.status.name == 'ok') {
-            $('#txtTemp').html(result['data']['main']['temp']);
+            $('#txtTemp').html(result['data']['main']['temp'] + '°C');
             $('#txtWeather').html(result['data']['weather'][0]['description']);
           }
         }
@@ -164,14 +166,6 @@ $(document).ready(function () {
 
 
   });
-
-
-
-
-
-
-
-
 });
 
 
