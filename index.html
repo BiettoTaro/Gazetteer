@@ -5,38 +5,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Fabio Soggia">
+    <link rel="stylesheet" href="./libs/vendors/bootstrap/bootstrap.css">
     <link rel="shortcut icon" type="image/ico" href="./favicon/favicon.ico">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin="" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./libs/vendors/bootstrap/bootstrap.css">
+
     <link rel="stylesheet" href="./libs/css/style.css">
     <title>gazetteer</title>
 </head>
 
 <body>
     <header>
-        <nav id="nav" class="navbar fixed-top navbar-light bg-light">
+        <nav id="nav" class="navbar fixed-top navbar-light bg-light justify-content-center">
             <a class="navbar-brand" href="#">
-                <img src="./favicon/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                <img src="./favicon/favicon.ico" width="25" height="25" class="d-inline-block align-top" alt="">
                 Gazetteer
             </a>
             <div class="d-flex justify-content-center"></div>
-            <div id="loader" class="spinner-grow" style="width: 2rem; height: 2rem;" role="status">
-                <span class="sr-only">Loading...</span>
+                <div id="loader" class="spinner-grow mr-2" style="width: 1.5rem; height: 1.5rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
-            </div>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> -->
 
-            <div class="form-inline collapse navbar-collapse justify-content-lg-center" id="navbarNavAltMarkup">
+            <div class="form-inline justify-content-center" id="navbarNavAltMarkup">
 
-                <select id="countrySelect" class="form-control mr-2"></select>
-                <button id="myBtn" class="btn btn-outline-success">details</button>
+                <select id="countrySelect" class="form-control mr-2">
+
+                </select>
+                <button id="myBtn" class="btn btn-outline-success mt-2 mt-md-0">details</button>
             </div>
 
         </nav>

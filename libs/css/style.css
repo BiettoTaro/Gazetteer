@@ -8,6 +8,9 @@ nav a {
   
 }
 
+#countryselect {
+  width: 50px;
+}
 
 /* map */
 #map {
@@ -18,3 +21,4 @@ nav a {
     right: 0;
     z-index: 0;
 }
+
