@@ -48,7 +48,7 @@ const gotPos = position => {
         lng: lng
       },
       success: function (result) {
-        console.log(result)
+
 
 
         if (result.status.name == 'ok') {
