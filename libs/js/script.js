@@ -2,7 +2,7 @@
 const modal = document.getElementById("myModal");
 const btn = document.getElementById("myBtn");
 const span = document.getElementsByClassName("close")[0];
-
+let border;
 const roundData = data => {
   let num = Math.abs(Number(data));
 
@@ -32,38 +32,38 @@ window.onclick = function (event) {
 let map = L.map('map').setView([51.505, -0.09], 13);
 
 
-const gotPos =  position => {
-  let lat =  position.coords.latitude;
-  let lng =  position.coords.longitude;
+const gotPos = position => {
+  let lat = position.coords.latitude;
+  let lng = position.coords.longitude;
 
- $(window).ready(function () {
-  $('#loader').fadeOut('slow');
+  $(window).ready(function () {
+    $('#loader').fadeOut('slow');
 
-   $.ajax({
-    url: 'libs/php/initPosition.php',
-    type: 'POST',
-    dataType: 'json',
-    data: {
-      lat: lat,
-      lng: lng
-    },
-    success: function (result) {
-console.log(result)
+    $.ajax({
+      url: 'libs/php/initPosition.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        lat: lat,
+        lng: lng
+      },
+      success: function (result) {
+        console.log(result)
 
 
-      if (result.status.name == 'ok') {
-        $('#countrySelect').val(result['data']['countryCode']);
-        let markers = new L.FeatureGroup();
-        map.addLayer(markers);
+        if (result.status.name == 'ok') {
+          $('#countrySelect').val(result['data']['countryCode']);
+          let markers = new L.FeatureGroup();
+          map.addLayer(markers);
 
           const marker = L.marker([lat, lng]).addTo(markers);
 
           map.fitBounds(markers.getBounds());
 
+        }
       }
-    }
+    });
   });
- });
 
   // L.geoJSON(position).addTo(map);
 
@@ -118,7 +118,7 @@ $(document).ready(function () {
         $('#countrySelect').html('');
 
         $.each(result.data, function (index) {
-          
+
           $('#countrySelect').append($('<option>', {
             value: result.data[index].code,
             text: result.data[index].name
@@ -148,9 +148,15 @@ $(document).ready(function () {
 
         const myLayer = L.geoJSON().addTo(map);
         if (result.status.name == 'ok') {
-
-        let newLayer = myLayer.addData(result['data']);
-        map.fitBounds(newLayer.getBounds());
+          if (map.hasLayer(border)) {
+            map.removeLayer(border);
+        }
+           border = myLayer.addData(result['data'], {
+            color: '#ff7800',
+            weight: 2,
+            opacity: 0.65
+           });
+          map.fitBounds(border.getBounds());
         }
       },
       error: function (jqXHR, textStatus, errorThrown) {
