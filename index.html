@@ -12,6 +12,7 @@
         crossorigin="" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
 
     <link rel="stylesheet" href="./libs/css/style.css">
     <title>gazetteer</title>
@@ -25,40 +26,30 @@
                 Gazetteer
             </a>
             <div class="d-flex justify-content-center"></div>
-                <div id="loader" class="spinner-grow mr-2" style="width: 1.5rem; height: 1.5rem;" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
+            <div id="loader" class="spinner-grow mr-2" style="width: 1.5rem; height: 1.5rem;" role="status">
+                <span class="sr-only">Loading...</span>
             </div>
-            <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button> -->
 
             <div class="form-inline justify-content-center" id="navbarNavAltMarkup">
-
-                <select id="countrySelect" class="form-control mr-2">
-
-                </select>
+                <select id="countrySelect" class="form-control mr-2"></select>
                 <button id="myBtn" class="btn btn-outline-success mt-2 mt-md-0">details</button>
             </div>
-
         </nav>
     </header>
-    <main>
 
+    <main>
         <section id="myModal" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <img id="flag" class="modal-title">
-                        <h3 id="txtCountry"></h3>
+                        <h3 id="txtCountry" class="mx-md-auto pt-md-3"></h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <table>
-
                             <tr>
                                 <td>Capital:</td>
                                 <td id="txtCapital" class="pl-2"></td>
@@ -66,26 +57,6 @@
                             <tr>
                                 <td>Population:</td>
                                 <td id="txtPop" class="pl-2"></td>
-                            </tr>
-                            <tr>
-                                <td>Currency:</td>
-                                <td id="txtCurrency" class="pl-2"></td>
-                            </tr>
-                            <tr>
-                                <td>Temperature:</td>
-                                <td id="txtTemp" class="pl-2"></td>
-                            </tr>
-                            <tr>
-                                <td>Weather:</td>
-                                <td id="txtWeather" class="pl-2"></td>
-                            </tr>
-                            <tr>
-                                <td>Covid cases:</td>
-                                <td id="txtCases" class="pl-2"></td>
-                            </tr>
-                            <tr>
-                                <td>Covid deaths:</td>
-                                <td id="txtDeaths" class="pl-2"></td>
                             </tr>
                         </table>
                     </div>
@@ -97,10 +68,172 @@
             </div>
         </section>
 
+        <section id="virus" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>coronavirus</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr>
+                                <td>Confirmed:</td>
+                                <td id="txtConfirmed" class="pl-2"></td>
+                            </tr>
+                            <tr>
+                                <td>Active:</td>
+                                <td id="txtActive" class="pl-2"></td>
+                            </tr>
+                            <tr>
+                                <td>Recovered:</td>
+                                <td id="txtRecovered" class="pl-2"></td>
+                            </tr>
+                            <tr>
+                                <td>Deaths:</td>
+                                <td id="txtDeaths" class="pl-2"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+        </section>
+
+        <section id="news" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content d-flex justify-content-center">
+                    <div class="modal-header">
+                        <h3 class="mx-auto">Top News</h3>
+                        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-auto">
+                        <div class="card" style="width: 10rem;">
+                            <img id="newsImg" src="" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h5 id="txtTitle" class="card-title">Card title</h5>
+                                <p id="txtDescription" class="card-text">Some quick example text to build on the card
+                                    title and make up the bulk of the card's content.</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a id="newsLink" href="#" class="btn btn-primary" target="_blank">See article</a>
+                    </div>
+                </div>
+        </section>
+
+        <section id="weather" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content d-flex justify-content-center">
+                    <div class="modal-header">
+                        <h3 class="mx-auto">Weather</h3>
+                        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-auto">
+                        <div class="card" style="width: 13rem;">
+                            <img id="weatherIcon" src="" class="card-img-top h-auto" alt="">
+                            <div class="card-body">
+                                <table>
+                                    <tr>
+                                        <td>Description:</td>
+                                        <td id="txtWeather" class="pl-2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Temperature:</td>
+                                        <td id="txtTemp" class="pl-2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Max:</td>
+                                        <td id="tempMax" class="pl-2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Min:</td>
+                                        <td id="tempMin" class="pl-2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Feels like:</td>
+                                        <td id="tempFeels" class="pl-2"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <section id="images" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="mx-auto pl-2">Images</h3>
+                        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img id="img1" src="" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img id="img2" src="" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img id="img3" src="" class="d-block w-100" alt="">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span id="prev" class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span id="next" class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <section id="currency" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Currency </h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr>
+                                <td>GBP to</td>
+                                <td id="txtCurrency"></td>
+                                <td id="rate"></td>
+                            </tr>
+                        </table>
+
+                        <label for="converter">Amount £:</label>
+                        <input type="number" name="converter" id="converter" value="100">
+                        <button id="convertBtn" class="btn btn-outline-success mt-2 mt-md-0">convert</button>
+
+                    </div>
+                    <p id="result" class="pl-3"></p>
+                    <p style="font-size: 0.5rem;" class="pl-1">Powered by <a href="https://www.amdoren.com">Amdoren</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <section>
-
             <div id="map"></div>
-
         </section>
     </main>
 
@@ -111,6 +244,9 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+    <script src="./libs/vendors/all.min.js"></script>
     <script src="./libs/js/script.js"></script>
 </body>
 
