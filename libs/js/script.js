@@ -426,7 +426,7 @@ $(document).ready(function () {
 
         if (result.status.name == 'ok') {
           $('#weatherIcon').attr('src', `https://openweathermap.org/img/wn/${icon}.png`);
-          $('#txtTemp').html(data.main.temp);
+          $('#txtTemp').html(`${data.main.temp}°C`);
           $('#description').html(`Feels like ${data.main.feels_like}°C. ${data.weather[0].description}.`);
           $('#maxMin').html(`${data.main.temp_max} / ${data.main.temp_min}°C`);
           $('#txtWind').html(`${data.wind.speed}m/s ${windDirection(data.wind.deg)}`);
