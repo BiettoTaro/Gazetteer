@@ -15,6 +15,11 @@ let border;
 let markers;
 let countryObjects = new L.FeatureGroup();
 
+const markerIcon = L.icon({
+  iconUrl: './favicon/favicon.ico',
+  iconSize: [20,20]
+});
+
 const windDirection = degree => {
 
   switch (true) {
@@ -86,10 +91,7 @@ const getCities = () => {
             if (data[i].countrycode == $('#countrySelect').val() && data[i].population >= 5.e+5) {
               map.addLayer(countryObjects);
 
-              const markerIcon = L.icon({
-                iconUrl: './favicon/favicon.ico',
-                iconSize: [20,20]
-              });
+              
 
               const marker = L.marker([data[i].lat, data[i].lng], {icon: markerIcon}).bindPopup(
                 `<h3 style="font-size: 1.2rem;">${data[i].name}</h3>
@@ -107,7 +109,7 @@ const getCities = () => {
 
             map.addLayer(countryObjects);
 
-            const marker = L.marker(map.getCenter(border)).bindPopup(
+            const marker = L.marker(map.getCenter(border), {icon: markerIcon}).bindPopup(
               `<h3 style="font-size: 1.2rem;">${$('#countrySelect option:selected').text()}</h3>
               <p>No data available</p>`
             ).addTo(countryObjects);
@@ -126,7 +128,7 @@ const getCities = () => {
       console.log(textStatus);
       console.log(jqXHR);
     }
-  })
+  }).then(()=> $('#loader').fadeOut('slow'));
 }
 
 const countryInfo = () => {
@@ -279,7 +281,7 @@ $(document).ready(function () {
   });
 
   $('#countrySelect').change(function () {
-
+    $('#loader').show();
     $.ajax({
       url: 'libs/php/borders.php',
       type: 'POST',
@@ -521,3 +523,4 @@ $(document).ready(function () {
 
 
 });
+ 
