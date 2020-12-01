@@ -5,9 +5,7 @@
 
   $execution_start_time = microtime(true) / 1000;
 
-  $key = '8973af05056b4ad383e858bae82330dd';
-
-  $url = 'https://newsapi.org/v2/top-headlines?language=en&country=' . $_REQUEST['country'] . '&apiKey=' . $key;
+  $url = 'http://api.geonames.org/citiesJSON?north=' . $_REQUEST['north'] . '&south=' . $_REQUEST['south'] . '&east=' . $_REQUEST['east'] . '&west=' . $_REQUEST['west'] . '&lang=en&maxRows=20&username=fabio_s';
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

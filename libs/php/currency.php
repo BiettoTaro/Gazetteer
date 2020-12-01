@@ -7,7 +7,9 @@
 
   $key = 'RfxfaXsvXKzUqa8TDKD7PmGdrNsHjE';
 
-  $url = 'https://www.amdoren.com/api/currency.php?api_key=' . $key . '&from=GBP&to=' . $_REQUEST['currency'] .'&amount=' . $_REQUEST['amount'];
+//   $url = 'https://www.amdoren.com/api/currency.php?api_key=' . $key . '&from=GBP&to=' . $_REQUEST['currency'] .'&amount=' . $_REQUEST['amount'];
+     
+$url = 'https://api.exchangeratesapi.io/latest?base=GBP';
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

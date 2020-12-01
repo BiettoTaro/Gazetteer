@@ -1,14 +1,37 @@
-nav a, h3 {
+nav a,
+h3 {
   font-family: 'Goldman', cursive;
 }
-  
+
 
 /* map */
 #map {
-    position: absolute;
-    top: 56px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 0;
+  position: absolute;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+
+.imgDescription {
+  opacity: .7;
+}
+
+#weatherIcon {
+  width: 3.5rem;
+  height: auto;
+}
+
+.weather {
+  font-size: .8rem;
+}
+
+#weatherList {
+  padding: 0;
+  margin: 0;
+}
+
+#weatherList li{
+  list-style-type: none;
 }

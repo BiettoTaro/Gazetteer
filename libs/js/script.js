@@ -10,7 +10,42 @@ const currency = document.getElementById("currency");
 const btn = document.getElementById("myBtn");
 const span = document.getElementsByClassName("close");
 
+let map = L.map('map').setView([51.505, -0.09], 13);
 let border;
+let markers;
+let countryObjects = new L.FeatureGroup();
+
+const windDirection = degree => {
+
+  switch (true) {
+    case degree === 0:
+    case degree === 360:
+      return 'E';
+      break;
+    case degree === 270:
+      return 'S';
+      break;
+    case degree === 180:
+      return 'W';
+      break;
+    case degree === 90:
+      return 'N';
+      break;
+    case (degree > 0 && degree < 90):
+      return 'NE';
+      break;
+    case (degree > 90 && degree < 180):
+      return 'NW';
+      break;
+    case (degree > 180 && degree < 270):
+      return 'SW';
+      break;
+    case (degree > 270 && degree < 360):
+      return 'SE';
+      break;
+  }
+}
+
 
 
 const roundData = data => {
@@ -25,6 +60,75 @@ const roundData = data => {
 
 };
 
+const getCities = () => {
+
+  $.ajax({
+    url: 'libs/php/cities.php',
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      north: $('#north').text(),
+      south: $('#south').text(),
+      east: $('#east').text(),
+      west: $('#west').text()
+    },
+    success: function (result) {
+
+
+      const data = result.data.geonames
+
+
+      if (result.status.name == 'ok') {
+
+        for (let i = 0; i < 20; i++) {
+
+          try {
+            if (data[i].countrycode == $('#countrySelect').val() && data[i].population >= 5.e+5) {
+              map.addLayer(countryObjects);
+
+              const markerIcon = L.icon({
+                iconUrl: './favicon/favicon.ico',
+                iconSize: [20,20]
+              });
+
+              const marker = L.marker([data[i].lat, data[i].lng], {icon: markerIcon}).bindPopup(
+                `<h3 style="font-size: 1.2rem;">${data[i].name}</h3>
+                <table>
+                  <tr>
+                    <td>Population:</td>
+                    <td class="pl-2">${roundData(data[i].population)}</td>
+                  </tr>
+                </table>
+                <p><a href="${data[i].wikipedia}">wikipedia</a></p>`
+              ).addTo(countryObjects);
+            }
+
+          } catch (e) {
+
+            map.addLayer(countryObjects);
+
+            const marker = L.marker(map.getCenter(border)).bindPopup(
+              `<h3 style="font-size: 1.2rem;">${$('#countrySelect option:selected').text()}</h3>
+              <p>No data available</p>`
+            ).addTo(countryObjects);
+          }
+
+        }
+
+
+
+
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      // your error code
+      console.log(errorThrown);
+      console.log(textStatus);
+      console.log(jqXHR);
+    }
+  })
+}
+
 const countryInfo = () => {
   $.ajax({
     url: 'libs/php/getCountryInfo.php',
@@ -35,6 +139,8 @@ const countryInfo = () => {
     },
     success: function (result) {
 
+
+
       if (result.status.name == 'ok') {
         $('#flag').attr('src', `https://www.countryflags.io/${$('#countrySelect').val()}/flat/64.png`);
         $('#txtCountry').html(result.data[0].countryName);
@@ -42,10 +148,20 @@ const countryInfo = () => {
         $('#txtPop').html(roundData(result.data[0].population));
         $('#txtCurrency').html(result.data[0].currencyCode);
         $('#wiki').attr('href', `https://en.wikipedia.org/wiki/${$('#countrySelect option:selected').text()}`);
+
+        $('#north').html(result.data[0].north);
+        $('#south').html(result.data[0].south);
+        $('#east').html(result.data[0].east);
+        $('#west').html(result.data[0].west);
+
+
+
       }
     }
-  })
-}
+  }).then(getCities)
+};
+
+
 
 btn.onclick = function () {
   details.style.display = "block";
@@ -61,7 +177,6 @@ window.onclick = function (event) {
   };
 };
 
-let map = L.map('map').setView([51.505, -0.09], 13);
 
 
 
@@ -87,12 +202,7 @@ const gotPos = position => {
 
         if (result.status.name == 'ok') {
           $('#countrySelect').val(result.data.countryCode);
-          let markers = new L.FeatureGroup();
-          map.addLayer(markers);
 
-          const marker = L.marker([lat, lng]).addTo(markers);
-
-          map.fitBounds(markers.getBounds());
 
         }
       }
@@ -169,6 +279,7 @@ $(document).ready(function () {
   });
 
   $('#countrySelect').change(function () {
+
     $.ajax({
       url: 'libs/php/borders.php',
       type: 'POST',
@@ -179,17 +290,21 @@ $(document).ready(function () {
       },
       success: function (result) {
 
-
-        const myLayer = L.geoJSON().addTo(map);
+        const polystyle = () => {
+          return {
+            fillColor: 'white',
+            weight: 1,
+            opacity: 1,
+            color: '#3b7a4c',  //Outline color
+            fillOpacity: 0.1
+          };
+        }
+        // const myLayer = L.geoJSON().addTo(map);
         if (result.status.name == 'ok') {
-          if (map.hasLayer(border)) {
-            map.removeLayer(border);
-          }
-          border = myLayer.addData(result.data, {
-            color: '#ff7800',
-            weight: 2,
-            opacity: 0.65
+          countryObjects.eachLayer(function (layer) {
+            countryObjects.removeLayer(layer);
           });
+          border = L.geoJSON(result.data, { style: polystyle }).addTo(countryObjects);
           map.fitBounds(border.getBounds());
         }
       },
@@ -260,16 +375,22 @@ $(document).ready(function () {
       },
       success: function (result) {
 
-
-
-        const data = result.data.articles[0];
+        const data = result.data.articles;
 
 
         if (result.status.name == 'ok') {
-          $('#newsImg').attr('src', data.urlToImage);
-          $('#txtTitle').html(data.title);
-          $('#txtDescription').html(data.description);
-          $('#newsLink').attr('href', data.url);
+
+          let ul = $('#newsList').html('');
+
+          if (data.length == 0) {
+            $(ul).before('<p>no news available for this country</p>');
+          }
+
+          $.each(data, function (index) {
+            let li = `<li>${data[index].title} - <a href="${data[index].url}" target="_blank">See article</a></li>`;
+            $(ul).after(li);
+
+          });
 
         }
       }
@@ -301,14 +422,16 @@ $(document).ready(function () {
 
 
         const icon = result.data.weather[0].icon;
+        const data = result.data
 
         if (result.status.name == 'ok') {
           $('#weatherIcon').attr('src', `https://openweathermap.org/img/wn/${icon}.png`);
-          $('#txtWeather').html(result.data.weather[0].description);
-          $('#txtTemp').html(result.data.main.temp + '°C');
-          $('#tempMax').html(result.data.main.temp_max + '°C');
-          $('#tempMin').html(result.data.main.temp_min + '°C');
-          $('#tempFeels').html(result.data.main.feels_like + '°C');
+          $('#txtTemp').html(data.main.temp);
+          $('#description').html(`Feels like ${data.main.feels_like}°C. ${data.weather[0].description}.`);
+          $('#maxMin').html(`${data.main.temp_max} / ${data.main.temp_min}°C`);
+          $('#txtWind').html(`${data.wind.speed}m/s ${windDirection(data.wind.deg)}`);
+          $('#humidity').html(`Humidity: ${data.main.humidity}%`)
+
         }
       }
     });
@@ -342,6 +465,9 @@ $(document).ready(function () {
           $('#img1').attr('src', result.data.results[0].urls.regular);
           $('#img2').attr('src', result.data.results[1].urls.regular);
           $('#img3').attr('src', result.data.results[2].urls.regular);
+          $('#imgDescription1').html(result.data.results[0].alt_description);
+          $('#imgDescription2').html(result.data.results[1].alt_description);
+          $('#imgDescription3').html(result.data.results[2].alt_description);
 
         }
       }
@@ -362,26 +488,32 @@ $(document).ready(function () {
       };
     };
 
-    $('#convertBtn').click(function () {
-      $.ajax({
-        url: 'libs/php/currency.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          currency: $('#txtCurrency').text(),
-          amount: $('#converter').val()
-        },
-        success: function (result) {
-
-          if (result.status.name == 'ok') {
-
-            $('#result').html(result.data.amount + ` ${$('#txtCurrency').text()}`)
+    $.ajax({
+      url: 'libs/php/currency.php',
+      type: 'POST',
+      dataType: 'json',
+      success: function (result) {
 
 
+        const rate = Number(result.data.rates[$('#txtCurrency').text()]);
+
+        if (result.status.name == 'ok') {
+
+          if (isNaN(rate)) {
+            $('#rate').html(': Rate not available for this currency');
+          } else {
+            $('#rate').html(': ' + rate.toFixed(2));
+
+            $('#convertBtn').click(function () {
+              $('#result').html(($('#converter').val() * rate).toFixed(2));
+            });
           }
+
+
         }
-      });
-    })
+      }
+    });
+
 
 
 
