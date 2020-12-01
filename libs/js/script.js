@@ -505,7 +505,7 @@ $(document).ready(function () {
             $('#rate').html(': ' + rate.toFixed(2));
 
             $('#convertBtn').click(function () {
-              $('#result').html(($('#converter').val() * rate).toFixed(2));
+              $('#result').html(`${$('#txtCurrency').text()}: ${($('#converter').val() * rate).toFixed(2)}`);
             });
           }
 
