@@ -10,7 +10,7 @@ const currency = document.getElementById("currency");
 const btn = document.getElementById("myBtn");
 const span = document.getElementsByClassName("close");
 
-let map = L.map('map').setView([51.505, -0.09], 13);
+let map = L.map('map').setView([51.505, -0.09], 5);
 let border;
 let markers;
 let countryObjects = new L.FeatureGroup();
@@ -206,7 +206,7 @@ const gotPos = position => {
   // L.geoJSON(position).addTo(map);
 
   const OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 15,
+    maxZoom: 18,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
