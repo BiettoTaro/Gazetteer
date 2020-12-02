@@ -10,14 +10,21 @@ const currency = document.getElementById("currency");
 const btn = document.getElementById("myBtn");
 const span = document.getElementsByClassName("close");
 
-let map = L.map('map').setView([51.505, -0.09], 5);
+let map = L.map('map');
 let border;
 let markers;
 let countryObjects = new L.FeatureGroup();
 
-const markerIcon = L.icon({
-  iconUrl: './favicon/favicon.ico',
-  iconSize: [20, 20]
+const markerIcon = L.ExtraMarkers.icon({
+  // iconUrl: './favicon/favicon.ico',
+  // iconSize: [20, 20]
+
+  shape: 'circle',
+  markerColor: 'violet',
+  prefix: 'fas',
+  icon: 'fa-city',
+  iconColor: '#fff',
+  svg: false
 });
 
 const windDirection = degree => {
@@ -93,7 +100,7 @@ const getCities = () => {
                     <td class="pl-2">${roundData(data[i].population)}</td>
                   </tr>
                 </table>
-                <p><a href="${data[i].wikipedia}">wikipedia</a></p>`
+                <p><a href="https://${data[i].wikipedia}" target="_blank">wikipedia</a></p>`
               ).addTo(countryObjects);
             }
 
@@ -196,6 +203,7 @@ const gotPos = position => {
 
         if (result.status.name == 'ok') {
           $('#countrySelect').val(result.data.countryCode);
+          $('#countrySelect').trigger('change');
 
 
         }
@@ -203,7 +211,7 @@ const gotPos = position => {
     }).then(countryInfo)
   });
 
-  // L.geoJSON(position).addTo(map);
+  map.setView([lat, lng], 5)
 
   const OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
@@ -231,9 +239,9 @@ if (navigator.geolocation) {
     maximumAge: tooOld
   }
   navigator.geolocation.getCurrentPosition(gotPos, fail, options);
-} else {
+}
 
-};
+
 
 
 $(document).ready(function () {
@@ -262,6 +270,9 @@ $(document).ready(function () {
             text: result.data[index].name
           }));
         });
+        // NAVIGATOR 
+
+
       },
       error: function (jqXHR, textStatus, errorThrown) {
         // your error code
@@ -269,8 +280,8 @@ $(document).ready(function () {
         console.log(textStatus);
         console.log(jqXHR);
       }
-    });
-  });
+    })
+  })
 
   $('#countrySelect').change(function () {
     $('#loader').show();
@@ -286,14 +297,14 @@ $(document).ready(function () {
 
         const polystyle = () => {
           return {
-            fillColor: 'white',
+            fillColor: '#3b7a4c',
             weight: 1,
             opacity: 1,
-            color: '#3b7a4c',  //Outline color
-            fillOpacity: 0.1
+            color: '#3b7a4c',
+            fillOpacity: 0.2
           };
         }
-        // const myLayer = L.geoJSON().addTo(map);
+
         if (result.status.name == 'ok') {
           countryObjects.eachLayer(function (layer) {
             countryObjects.removeLayer(layer);
@@ -301,6 +312,8 @@ $(document).ready(function () {
           border = L.geoJSON(result.data, { style: polystyle }).addTo(countryObjects);
           map.fitBounds(border.getBounds());
         }
+
+
       },
       error: function (jqXHR, textStatus, errorThrown) {
         // your error code
@@ -309,6 +322,7 @@ $(document).ready(function () {
         console.log(jqXHR);
       }
     }).then(countryInfo);
+
   })
 
   //covid easybutton
@@ -368,21 +382,28 @@ $(document).ready(function () {
         country: $('#countrySelect').val()
       },
       success: function (result) {
-
+        console.log(result)
         const data = result.data.articles;
 
 
         if (result.status.name == 'ok') {
 
-          let ul = $('#newsList').html('');
+          let tbl = $('#newsList').html('');
 
           if (data.length == 0) {
-            $(ul).before('<p>no news available for this country</p>');
+            $(tbl).before('<p>no news available for this country</p>');
           }
 
           $.each(data, function (index) {
-            let li = `<li>${data[index].title} - <a href="${data[index].url}" target="_blank">See article</a></li>`;
-            $(ul).after(li);
+            if (data[index].urlToImage) {
+              let tRows = `
+            <tr class="d-flex flex-wrap mb-3 flex-md-nowrap">
+              <td class="col-12 col-md-4 px-0 pr-md-2"><img src="${data[index].urlToImage}"></td>
+              <td >${data[index].title} - <a href="${data[index].url}" target="_blank">See article</a></td>
+            </tr>`;
+              $(tbl).append(tRows);
+            }
+
 
           });
 

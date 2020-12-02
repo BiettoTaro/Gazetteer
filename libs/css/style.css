@@ -35,3 +35,8 @@ h3 {
 #weatherList li{
   list-style-type: none;
 }
+
+td img {
+  width: 100%;
+  height: auto;
+}

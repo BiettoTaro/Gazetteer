@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
-
+    <link rel="stylesheet" href="./libs/vendors/leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css">
     <link rel="stylesheet" href="./libs/css/style.css">
     <title>gazetteer</title>
 </head>
@@ -72,7 +72,7 @@
 
         <section id="virus" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content ">
+                <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="mx-auto">coronavirus</h3>
                         <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
@@ -104,6 +104,7 @@
                         </table>
                     </div>
                 </div>
+            </div>
         </section>
 
         <section id="news" class="modal" tabindex="-1" role="dialog">
@@ -116,14 +117,15 @@
                         </button>
                     </div>
                     <div class="modal-body mx-auto">
-                        <ul id="newsList"></ul>
+                        <!-- <ul id="newsList"></ul> -->
+                        <table id="newsList"></table>
                     </div>
                 </div>
         </section>
 
         <section id="weather" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                <div class="modal-content d-flex justify-content-center">
+                <div class="modal-content d-flex justify-content-center w-75 mx-auto">
                     <div class="modal-header">
                         <h3 class="mx-auto">Weather</h3>
                         <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
@@ -241,7 +243,7 @@
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
-
+    <script src="./libs/vendors/leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js"></script>
     <script src="./libs/vendors/all.min.js"></script>
     <script src="./libs/js/script.js"></script>
 </body>
